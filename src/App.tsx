@@ -9,7 +9,6 @@ function App() {
     <>
       <BrowserRouter>
         <Search />
-
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="history" element={<History />} />

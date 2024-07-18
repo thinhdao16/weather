@@ -1,5 +1,12 @@
+import useBookStore from "../store/bookStore";
+
 function Search() {
-  return <div>Search</div>;
+  const { country } = useBookStore();
+  return (
+    <>
+      <div>{country}</div>
+    </>
+  );
 }
 
 Search.propTypes = {};
