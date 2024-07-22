@@ -10,7 +10,7 @@ function WeatherApp() {
   const apiKey = "fe4feefa8543e06d4f3c66d92c61b69c";
   const url = `http://api.openweathermap.org/geo/1.0/direct?q=${valueSearch}&limit=5&appid=${apiKey}`;
 
-  console.log(dataSearch);
+  console.log(data);
   const toggleRef = useRef<any>(null);
   const handleOpenHistory = () => {
     setOpenHistory(true);
@@ -29,6 +29,29 @@ function WeatherApp() {
         console.log(response);
 
         setDataSearch(response?.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSearchWeather = async (name: string) => {
+    try {
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=fe4feefa8543e06d4f3c66d92c61b69c`
+      );
+      if (response.status === 200) {
+        console.log(response);
+        const postResponse = await axios.post(
+          "/user",
+          { data: response.data },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log("Post response:", postResponse?.data);
       }
     } catch (error) {
       console.error(error);
@@ -87,24 +110,32 @@ function WeatherApp() {
             </button>
             {openHistory && (
               <div
-                className="absolute top-[55px] w-[368px] bg-white rounded-lg p-6 shadow-lg z-50"
+                className="absolute top-[55px] w-[368px] bg-white rounded-lg shadow-lg z-50"
                 ref={toggleRef}
               >
-                <div className="flex justify-between ">
-                  <div className="flex">
-                    <span className="font-medium">
-                      {dataSearch?.name}, {dataSearch?.sys?.country}
-                    </span>
+                {dataSearch?.map((data_item: any) => (
+                  <div className=" hover:bg-gray-100">
+                    <div className="flex justify-between p-6 items-center ">
+                      <div className="text-start">
+                        <span className="font-medium">
+                          {data_item?.name}, {data_item?.country}
+                        </span>
+                        <p className="text-gray-400">
+                          {data_item?.lat}, {data_item?.lon}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleSearchWeather(data_item?.name)}
+                      >
+                        <img
+                          src="../../src/assets/icon_weather_app/Add.png"
+                          alt=""
+                        />
+                      </button>
+                    </div>
+                    <hr className=" mx-6" />
                   </div>
-                  <button>
-                    <img
-                      src="../../src/assets/icon_weather_app/Add.png"
-                      alt=""
-                    />
-                  </button>
-                </div>
-
-                <hr className="mt-4" />
+                ))}
               </div>
             )}
           </div>
