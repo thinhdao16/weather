@@ -41,16 +41,12 @@ function WeatherApp() {
         `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=fe4feefa8543e06d4f3c66d92c61b69c`
       );
       if (response.status === 200) {
-        console.log(response);
-        const postResponse = await axios.post(
-          "/user",
-          { data: response.data },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        console.log(response.data);
+        const postResponse = await axios.post("add-new", response.data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         console.log("Post response:", postResponse?.data);
       }
     } catch (error) {
