@@ -7,5 +7,6 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  "compilerOptions": ["node", "react","react-dom"]
 }
