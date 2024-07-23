@@ -23,7 +23,7 @@ function HomePage() {
         const day = date.getDate();
         return `${month} ${day}, ${year}`;
     }
-    const apiKey = 'fe4feefa8543e06d4f3c66d92c61b69c'
+    const apiKey = '85ca72f1b6e7246de11846015225c31d'
 
 
     const groupedSchedule = useMemo(() => {

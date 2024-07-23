@@ -1,36 +1,36 @@
-// src/mocks/handlers.js
-import { http, HttpResponse } from "msw";
-import { storedData } from "./data/data_weather_fake";
+import { http, HttpResponse } from 'msw';
+import { storedData } from './data/data_weather_fake';
+
+
 
 export const handlers = [
-  http.get("/user", () => {
+  http.get('/user', () => {
     return HttpResponse.json(storedData);
   }),
 
-  http.post("/user", async (req, res, ctx) => {
-    // In tất cả các thông tin từ yêu cầu để kiểm tra
-    console.log("Request:", req);
-    console.log("Request headers:", req.headers);
-    const requestBody = await req.text(); // Đọc dữ liệu dưới dạng văn bản
-    console.log("Request body:", requestBody);
+  
+  http.post("/api/messages", async ({ request }:any) => {
+		const requestBody = await request.json();
+    const data = requestBody?.dataSave
+    storedData.push(data);
+    return HttpResponse.json(data, {
+      status: 201,
+    })
+	}),
+  http.delete('/api/messages/:id', ({ params }) => {
+    const { id }:any = params;
+    const postId = parseInt(id, 10);
 
-    try {
-      const newData = JSON.parse(requestBody); // Phân tích dữ liệu JSON từ văn bản
-      console.log("Parsed data:", newData); // In dữ liệu đã phân tích cú pháp
+    const index = storedData.findIndex(item => item.id === postId);
 
-      storedData.push(newData);
-
-      return res(
-        ctx.json(newData, {
-          status: 201,
-        })
-      );
-    } catch (error) {
-      console.error("Error processing request:", error);
-      return res(
-        ctx.status(500),
-        ctx.json({ error: "Failed to process request" })
-      );
+    if (index === -1) {
+      return HttpResponse.json({ message: "Not Found" }, { status: 404 });
     }
+
+    // Xóa mục khỏi mảng
+    const [deletedPost] = storedData.splice(index, 1);
+
+    // Trả về mục đã xóa
+    return HttpResponse.json(deletedPost, { status: 200 });
   }),
 ];

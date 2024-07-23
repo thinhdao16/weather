@@ -16,7 +16,7 @@ function History() {
 
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${keySearch}&appid=fe4feefa8543e06d4f3c66d92c61b69c`
+        `https://api.openweathermap.org/data/2.5/weather?q=${keySearch}&appid=85ca72f1b6e7246de11846015225c31d`
       );
       if (response.data) {
         console.log(response)
@@ -57,7 +57,7 @@ function History() {
 
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${data}&appid=fe4feefa8543e06d4f3c66d92c61b69c`
+        `https://api.openweathermap.org/data/2.5/weather?q=${data}&appid=85ca72f1b6e7246de11846015225c31d`
       );
       if (response.data) {
         console.log(response)

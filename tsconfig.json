@@ -8,5 +8,7 @@
       "path": "./tsconfig.node.json"
     }
   ],
-  "compilerOptions": ["node", "react","react-dom"]
+  "compilerOptions": {
+    "types": ["vitest/globals"]
+  }
 }
