@@ -1,26 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import useWeatherAppStore from '../../store/weatherAppStore';
+import useWeatherAppStore from "../../store/weatherAppStore";
 import Search from "../components/weather-app/Search";
 
 function WeatherApp() {
   const [data, setData] = useState<any>();
 
-const{reload ,setReload} = useWeatherAppStore()
+  const { reload, setReload } = useWeatherAppStore();
 
- 
   const handleDeleteWeather = async (id: number) => {
     try {
       const response = await axios.delete(`/api/messages/${id}`);
       if (response) {
         console.log("Deleted data:", response?.data);
-        setReload((prev) => 1 + prev);
+        setReload((prev: any) => 1 + prev);
       }
     } catch (error) {
       console.error(error);
     }
   };
-
 
   useEffect(() => {
     const dataWeather = async () => {
@@ -33,7 +31,6 @@ const{reload ,setReload} = useWeatherAppStore()
     };
     dataWeather();
   }, [reload]);
-
 
   return (
     <div className=" w-full bg-zinc-200 flex justify-center items-center">
@@ -48,17 +45,18 @@ const{reload ,setReload} = useWeatherAppStore()
               OpenWeatherMap API
             </span>
           </div>
-         <Search/>
+          <Search />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-8 mt-8">
-          {data?.map((data_item: any, index:number) => (
+          {data?.map((data_item: any, index: number) => (
             <div className="rounded-3xl bg-white shadow-md " key={index}>
               <div className="p-4 sm:p-7 md:p-7 lg:p-7">
                 <div className="flex justify-between items-center">
                   <span className="text-main text-3xl">{data_item?.name}</span>
-                  <button className="bg-white w-12 h-12 rounded-full border border-solid border-gray-400 flex items-center justify-center"
+                  <button
+                    className="bg-white w-12 h-12 rounded-full border border-solid border-gray-400 flex items-center justify-center"
                     onClick={() => handleDeleteWeather(data_item?.id)}
-                  aria-label="delete"
+                    aria-label="delete"
                   >
                     <img
                       src="../../src/assets/icon_weather_app/Delete.png"

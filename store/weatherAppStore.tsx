@@ -1,15 +1,12 @@
 import { create } from "zustand";
 
 interface WeatherAppStoreState {
-
-  reload:number;
-  setReload: (newValue: number) => void;
+  reload: number;
+  setReload: any;
 }
 
 const useWeatherAppStore = create<WeatherAppStoreState>((set) => ({
-
-  reload:0,
-  setReload:(newValue:any)=>set({reload:newValue})
-
+  reload: 0,
+  setReload: (newValue: number) => set({ reload: newValue }),
 }));
 export default useWeatherAppStore;
