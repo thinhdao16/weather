@@ -125,7 +125,7 @@ const{setReload} = useWeatherAppStore()
                         errorLog ? (
                           <div className="p-6">
                             <p className="font-medium">
-                              City called "{valueSearch}"" was not found
+                              City called "{valueSearch}" was not found
                             </p>
                             <span className="text-gray-400">
                               Try different city name
