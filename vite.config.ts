@@ -12,6 +12,9 @@ export default defineConfig({
     environment: "jsdom",
     css: true,
     setupFiles: "./src/test/test.ts",
+    // coverage: {
+    //   provider: 'istanbul' 
+    // },
   },
   server: {
     proxy: {
@@ -23,4 +26,9 @@ export default defineConfig({
       },
     },
   },
+  // resolve: {
+  //   alias: {
+  //     'msw': './node_modules/m', 
+  //   },
+  // },
 });

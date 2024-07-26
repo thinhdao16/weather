@@ -1,0 +1,164 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<HomePage/> > render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="flex items-center justify-center "
+  >
+    <div
+      class="w-full lg:w-1/4 md:w-1/2 sm:w-1/2 px-6 py-2 flex"
+    >
+      <button
+        class="flex-1 text-left flex gap-1 items-center"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          stroke="currentColor"
+          stroke-width="0"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            id="Location_On"
+          >
+            <g>
+              <path
+                d="M12,21.933a1.715,1.715,0,0,1-1.384-.691L5.555,14.5a7.894,7.894,0,1,1,12.885-.009L13.385,21.24A1.717,1.717,0,0,1,12,21.933ZM11.992,3.066A6.81,6.81,0,0,0,7.414,4.815a6.891,6.891,0,0,0-1.05,9.1l5.051,6.727a.725.725,0,0,0,.584.292h0a.732.732,0,0,0,.586-.292l5.044-6.734A6.874,6.874,0,0,0,12.81,3.113,7.277,7.277,0,0,0,11.992,3.066Z"
+              />
+              <path
+                d="M12,12.5A2.5,2.5,0,1,1,14.5,10,2.5,2.5,0,0,1,12,12.5Zm0-4A1.5,1.5,0,1,0,13.5,10,1.5,1.5,0,0,0,12,8.5Z"
+              />
+            </g>
+          </g>
+        </svg>
+        <span
+          class="font-semibold"
+        >
+          Ho Chi Minh City, VN
+        </span>
+      </button>
+      <div
+        class="flex-1 flex items-center justify-end text-right"
+      >
+        <button>
+          <svg
+            fill="currentColor"
+            height="1em"
+            id="search"
+            stroke="currentColor"
+            stroke-width="0"
+            version="1.1"
+            viewBox="0 0 24 24"
+            width="1em"
+            x="0px"
+            xmlns="http://www.w3.org/2000/svg"
+            y="0px"
+          >
+            <g>
+              <path
+                d="M20.031,20.79c0.46,0.46,1.17-0.25,0.71-0.7l-3.75-3.76c1.27-1.41,2.04-3.27,2.04-5.31
+		c0-4.39-3.57-7.96-7.96-7.96s-7.96,3.57-7.96,7.96c0,4.39,3.57,7.96,7.96,7.96c1.98,0,3.81-0.73,5.21-1.94L20.031,20.79z
+		 M4.11,11.02c0-3.84,3.13-6.96,6.96-6.96c3.84,0,6.96,3.12,6.96,6.96c0,3.84-3.12,6.96-6.96,6.96C7.24,17.98,4.11,14.86,4.11,11.02
+		z"
+              />
+            </g>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="bg-gray-200 px-6 py-4 flex flex-col justify-center items-center"
+  >
+    <div
+      class=" w-full lg:w-1/4 md:w-1/2 sm:w-1/2"
+    >
+      <div
+        class="p-4 rounded-xl bg-white shadow-md "
+      >
+        <div
+          class="text-start"
+        >
+          <span
+            class="text-gray-500 font-medium"
+          >
+            July 26, 2024
+          </span>
+        </div>
+        <div
+          class="flex items-center justify-evenly"
+        >
+          <img
+            alt="error"
+            src="https://openweathermap.org/img/wn/undefined@2x.png"
+          />
+          <div
+            class="flex flex-col"
+          >
+            <span
+              class="text-4xl font-semibold"
+            >
+              NaN°C
+            </span>
+            <span
+              class="text-gray-500 font-medium"
+            >
+                undefined
+            </span>
+          </div>
+        </div>
+        <div
+          class="flex justify-between"
+        >
+          <div
+            class="flex-1 text-gray-400"
+          >
+            Humidity 
+            <span
+              class="block text-black font-medium"
+            >
+              %
+            </span>
+          </div>
+          <div
+            class="flex-1 text-gray-400"
+          >
+            Winds 
+            <span
+              class="block text-black font-medium"
+            >
+               m/s
+            </span>
+          </div>
+          <div
+            class="flex-1 text-gray-400"
+          >
+            Visibility 
+            <span
+              class="block text-black font-medium"
+            >
+              NaN km  
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="text-start mt-4 mb-2"
+      >
+        <span
+          class="font-medium"
+        >
+          5-day Forecast (3 Hours)
+        </span>
+      </div>
+      <div
+        class="p-4 rounded-xl shadow-md bg-white flex flex-col text-start"
+      >
+        <div />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

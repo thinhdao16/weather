@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import AccessManagement from './../pages/AccessManagement';
 
 function RedirectPage() {
 const navigation = useNavigate()
@@ -15,6 +16,9 @@ const handleNavigatePage = (data:string)=>{
             </button>
             <button onClick={()=>handleNavigatePage("/weather-app")}>
                 Weather forecast
+            </button>
+            <button onClick={()=>handleNavigatePage("/access-management")}>
+               Access management
             </button>
     </div>
     </div>
