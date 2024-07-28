@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   createColumnHelper,
   flexRender,
@@ -7,84 +7,115 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
+import axios from "axios";
+import { Popover } from "antd";
 
 type Person = {
-  firstName: string;
-  lastName: string;
-  age: number;
-  visits: number;
-  status: string;
-  progress: number;
+  name: string;
+  email: string;
+  active: boolean;
+  role: string[];
+  img: string;
 };
-
-const defaultData: Person[] = [
-  {
-    firstName: 'Tanner',
-    lastName: 'Linsley',
-    age: 24,
-    visits: 100,
-    status: 'In Relationship',
-    progress: 50,
-  },
-  {
-    firstName: 'Tandy',
-    lastName: 'Miller',
-    age: 40,
-    visits: 40,
-    status: 'Single',
-    progress: 80,
-  },
-  {
-    firstName: 'Joe',
-    lastName: 'Dirte',
-    age: 45,
-    visits: 20,
-    status: 'Complicated',
-    progress: 10,
-  },
-  // Add more data as needed
-];
 
 const columnHelper = createColumnHelper<Person>();
 
-const columns = [
-  columnHelper.accessor('firstName', {
-    cell: info => info.getValue(),
-    footer: info => info.column.id,
-    header: () => 'First Name',
-  }),
-  columnHelper.accessor('lastName', {
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Last Name</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('age', {
-    header: () => 'Age',
-    cell: info => info.renderValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('visits', {
-    header: () => <span>Visits</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('status', {
-    header: 'Status',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('progress', {
-    header: 'Profile Progress',
-    footer: info => info.column.id,
-  }),
-];
-
 function AccessManagement() {
-  const [data, setData] = React.useState(() => [...defaultData]);
+  const [data, setData] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
   const [filtering, setFiltering] = React.useState([]);
-  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [reload, setReload] = React.useState(0);
   const rerender = React.useReducer(() => ({}), {})[1];
 
+  const handleRemove = async (person: Person) => {
+    try {
+      const response = await axios.delete(`/access-manager/${person?.email}`);
+      if (response) {
+        console.log("Deleted data:", response?.data);
+        setReload((prev: any) => 1 + prev);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    // Add remove logic here
+  };
+
+  const ActionCell = ({ person }: { person: Person }) => {
+    const [popoverVisible, setPopoverVisible] = React.useState(false);
+    const [role, setRole] = React.useState<string[]>(person.role || []);
+    const handleCancel = () => {
+      setPopoverVisible(false);
+    };
+    console.log(person);
+    return (
+      <div className="flex gap-2">
+        <Popover
+          content={
+            <div>
+              <div className=" flex gap-3 flex-wrap">
+                {role?.map((data: string, index: number) => (
+                  <>
+                    <div key={index}>
+                      <div>{data}</div>
+                    </div>
+                  </>
+                ))}
+              </div>
+              <button onClick={handleCancel}>Cancel</button>
+            </div>
+          }
+          trigger="click"
+          open={popoverVisible}
+          onOpenChange={(visible) => setPopoverVisible(visible)}
+        >
+          <button onClick={() => setPopoverVisible(true)}>Modify Roles</button>
+        </Popover>
+        <button onClick={() => handleRemove(person)}>Remove</button>
+      </div>
+    );
+  };
+
+  const columns = [
+    columnHelper.accessor((row) => row, {
+      id: "info",
+      cell: (info) => (
+        <div className="grid grid-cols-2 justify-center items-center">
+          <div className="flex gap-2">
+            <img
+              src={info?.row?.original?.img}
+              alt="nothing"
+              className="w-12 h-12 rounded-full"
+            />
+            <div className="text-left">
+              <span className="font-medium">{info?.row?.original?.name}</span>{" "}
+              <p className="text-gray-400 text-xs">
+                {info?.row.original?.email}
+              </p>
+            </div>
+          </div>
+
+          <span className="font-medium text-yellow-500">
+            {info.row.original.active ? "" : "Not Logged In"}
+          </span>
+        </div>
+      ),
+      header: () => "Name and Email",
+    }),
+    columnHelper.accessor("role", {
+      header: () => "User Role",
+      cell: (info) => info.renderValue(),
+    }),
+    columnHelper.display({
+      id: "actions",
+      header: () => <span>Actions</span>,
+      cell: (info) => <ActionCell person={info.row.original} />,
+    }),
+  ];
   const table = useReactTable({
     data,
     columns,
@@ -102,13 +133,25 @@ function AccessManagement() {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
+  React.useEffect(() => {
+    const dataUser = async () => {
+      try {
+        const response = await axios.get("/access-manager");
+        setData(response.data.data_access_management);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    dataUser();
+  }, [reload]);
+
   return (
     <div className="p-2">
       <table>
         <thead>
-          {table.getHeaderGroups().map(headerGroup => (
+          {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
+              {headerGroup.headers.map((header) => (
                 <th key={header.id}>
                   {header.isPlaceholder
                     ? null
@@ -122,9 +165,9 @@ function AccessManagement() {
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map(row => (
+          {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
-              {row.getVisibleCells().map(cell => (
+              {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
@@ -133,9 +176,9 @@ function AccessManagement() {
           ))}
         </tbody>
         <tfoot>
-          {table.getFooterGroups().map(footerGroup => (
+          {table.getFooterGroups().map((footerGroup) => (
             <tr key={footerGroup.id}>
-              {footerGroup.headers.map(header => (
+              {footerGroup.headers.map((header) => (
                 <th key={header.id}>
                   {header.isPlaceholder
                     ? null
@@ -155,15 +198,22 @@ function AccessManagement() {
       </button>
       <div className="h-4" />
       <div>
-        <span>Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}</span>
+        <span>
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </span>
         <button
-          onClick={() => table.setPageIndex(table.getState().pagination.pageIndex - 1)}
+          onClick={() =>
+            table.setPageIndex(table.getState().pagination.pageIndex - 1)
+          }
           disabled={!table.getCanPreviousPage()}
         >
           Previous
         </button>
         <button
-          onClick={() => table.setPageIndex(table.getState().pagination.pageIndex + 1)}
+          onClick={() =>
+            table.setPageIndex(table.getState().pagination.pageIndex + 1)
+          }
           disabled={!table.getCanNextPage()}
         >
           Next
