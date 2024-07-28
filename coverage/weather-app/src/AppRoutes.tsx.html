@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Search.tsx</title>
+    <title>Code coverage report for weather-app/src/AppRoutes.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/components</a> Search.tsx</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">weather-app/src</a> AppRoutes.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.47% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/21</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.47% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/21</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -89,23 +89,9 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -114,7 +100,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -125,40 +112,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CiLocationOn, CiSearch } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
-import useBookStore from './../../store/bookStore';
-&nbsp;
-function Search() {
-  const navigation = useNavigate()
-  const { country } = useBookStore()
-  const handleToHistory = <span class="fstat-no" title="function not covered" >(data: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    navigation(data)</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import RedirectPage from './components/RedirectPage'
+import {  Route, Routes } from 'react-router-dom'
+import History from "./pages/History";
+import HomePage from "./pages/HomePage";
+import WeatherApp from "./pages/WeatherApp";
+import AccessManagement from './pages/AccessManagement';
+function AppRoutes() {
   return (
-    &lt;div className="flex items-center justify-center "&gt;
-      &lt;div className="w-full lg:w-1/4 md:w-1/2 sm:w-1/2 px-6 py-2 flex"&gt;
-        &lt;button className="flex-1 text-left flex gap-1 items-center" onClick={<span class="fstat-no" title="function not covered" >() =&gt; handleToHistory("/")}&gt;</span>
-          &lt;CiLocationOn /&gt;
-          &lt;span className="font-semibold"&gt;
-            {country}
-          &lt;/span&gt;
-        &lt;/button&gt;
-        &lt;div className="flex-1 flex items-center justify-end text-right"&gt;
-          &lt;button onClick={<span class="fstat-no" title="function not covered" >() =&gt; handleToHistory("/history")}&gt;</span>
-            &lt;CiSearch /&gt;
-          &lt;/button&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
+    &lt;&gt;
+        &lt;RedirectPage /&gt;
+&nbsp;
+        &lt;Routes&gt;
+          &lt;Route path="/" element={&lt;HomePage /&gt;} /&gt;
+          &lt;Route path="/history" element={&lt;History /&gt;} /&gt;
+          &lt;Route path="/weather-app" element={&lt;WeatherApp /&gt;} /&gt;
+          &lt;Route path="/access-management" element={&lt;AccessManagement /&gt;} /&gt;
+&nbsp;
+        &lt;/Routes&gt;
+&nbsp;
+    &lt;/&gt;
   )
 }
 &nbsp;
+AppRoutes.propTypes = {}
 &nbsp;
-export default Search
+export default AppRoutes
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -166,7 +148,7 @@ export default Search
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-26T03:27:30.606Z
+                at 2024-07-26T09:09:32.454Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
