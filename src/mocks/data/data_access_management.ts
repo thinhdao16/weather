@@ -69,4 +69,5 @@ export const data_access_management = [
     role: ["Auditor"],
     img: "https://www.w3schools.com/w3images/avatar6.png",
   },
+  
 ];

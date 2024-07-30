@@ -42,4 +42,19 @@ export const handlers = [
     const [deletedPost] = data_access_management.splice(index, 1);
     return HttpResponse.json(deletedPost, { status: 200 });
   }),
+  http.put("/access-manager-role", async ({ request }: { request: any }) => {
+    const requestBody = await request.json();
+    const user = data_access_management.find(user => user.email === requestBody?.email)
+    console.log(requestBody)
+    if (user) {
+      user.role = requestBody?.role
+      return HttpResponse.json({ message: "Update role success", user }, { status: 201 });
+    } else {
+      return HttpResponse.json({ message: "Not Found" }, { status: 404 });
+    }
+  }),
+  http.post("/access-manager", async ({request}:{request:any})=>{
+const requestBody = await request.json()
+
+  })
 ];
