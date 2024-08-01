@@ -1,7 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-import './index.css'
+import "./index.css";
 
 //3 TanStack Libraries!!!
 import {
@@ -13,119 +13,119 @@ import {
   Row,
   SortingState,
   useReactTable,
-} from '@tanstack/react-table'
+} from "@tanstack/react-table";
 import {
   keepPreviousData,
   QueryClient,
   QueryClientProvider,
   useInfiniteQuery,
-} from '@tanstack/react-query'
-import { useVirtualizer } from '@tanstack/react-virtual'
+} from "@tanstack/react-query";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
-import { fetchData, Person, PersonApiResponse } from './makeData'
+import { fetchData, Person, PersonApiResponse } from "./makeData";
 
-const fetchSize = 50
+const fetchSize = 50;
 
 function App() {
   //we need a reference to the scrolling element for logic down below
-  const tableContainerRef = React.useRef<HTMLDivElement>(null)
+  const tableContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const columns = React.useMemo<ColumnDef<Person>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
+        accessorKey: "id",
+        header: "ID",
         size: 60,
       },
       {
-        accessorKey: 'firstName',
-        cell: info => info.getValue(),
+        accessorKey: "firstName",
+        cell: (info) => info.getValue(),
       },
       {
-        accessorFn: row => row.lastName,
-        id: 'lastName',
-        cell: info => info.getValue(),
+        accessorFn: (row) => row.lastName,
+        id: "lastName",
+        cell: (info) => info.getValue(),
         header: () => <span>Last Name</span>,
       },
       {
-        accessorKey: 'age',
-        header: () => 'Age',
+        accessorKey: "age",
+        header: () => "Age",
         size: 50,
       },
       {
-        accessorKey: 'visits',
+        accessorKey: "visits",
         header: () => <span>Visits</span>,
         size: 50,
       },
       {
-        accessorKey: 'status',
-        header: 'Status',
+        accessorKey: "status",
+        header: "Status",
       },
       {
-        accessorKey: 'progress',
-        header: 'Profile Progress',
+        accessorKey: "progress",
+        header: "Profile Progress",
         size: 80,
       },
       {
-        accessorKey: 'createdAt',
-        header: 'Created At',
-        cell: info => info.getValue<Date>().toLocaleString(),
+        accessorKey: "createdAt",
+        header: "Created At",
+        cell: (info) => info.getValue<Date>().toLocaleString(),
         size: 200,
       },
     ],
     []
-  )
+  );
 
   //react-query has a useInfiniteQuery hook that is perfect for this use case
   const { data, fetchNextPage, isFetching, isLoading } =
     useInfiniteQuery<PersonApiResponse>({
       queryKey: [
-        'people',
+        "people",
         sorting, //refetch when sorting changes
       ],
       queryFn: async ({ pageParam = 0 }) => {
-        const start = (pageParam as number) * fetchSize
-        const fetchedData = await fetchData(start, fetchSize, sorting) //pretend api call
-        return fetchedData
+        const start = (pageParam as number) * fetchSize;
+        const fetchedData = await fetchData(start, fetchSize, sorting); //pretend api call
+        return fetchedData;
       },
       initialPageParam: 0,
       getNextPageParam: (_lastGroup, groups) => groups.length,
       refetchOnWindowFocus: false,
       placeholderData: keepPreviousData,
-    })
+    });
 
   //flatten the array of arrays from the useInfiniteQuery hook
   const flatData = React.useMemo(
-    () => data?.pages?.flatMap(page => page.data) ?? [],
+    () => data?.pages?.flatMap((page) => page.data) ?? [],
     [data]
-  )
-  const totalDBRowCount = data?.pages?.[0]?.meta?.totalRowCount ?? 0
-  const totalFetched = flatData.length
+  );
+  const totalDBRowCount = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
+  const totalFetched = flatData.length;
 
   //called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
   const fetchMoreOnBottomReached = React.useCallback(
     (containerRefElement?: HTMLDivElement | null) => {
       if (containerRefElement) {
-        const { scrollHeight, scrollTop, clientHeight } = containerRefElement
+        const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
         //once the user has scrolled within 500px of the bottom of the table, fetch more data if we can
         if (
           scrollHeight - scrollTop - clientHeight < 500 &&
           !isFetching &&
           totalFetched < totalDBRowCount
         ) {
-          fetchNextPage()
+          fetchNextPage();
         }
       }
     },
     [fetchNextPage, isFetching, totalFetched, totalDBRowCount]
-  )
+  );
 
   //a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
   React.useEffect(() => {
-    fetchMoreOnBottomReached(tableContainerRef.current)
-  }, [fetchMoreOnBottomReached])
+    fetchMoreOnBottomReached(tableContainerRef.current);
+  }, [fetchMoreOnBottomReached]);
 
   const table = useReactTable({
     data: flatData,
@@ -137,23 +137,23 @@ function App() {
     getSortedRowModel: getSortedRowModel(),
     manualSorting: true,
     debugTable: true,
-  })
+  });
 
   //scroll to top of table when sorting changes
-  const handleSortingChange: OnChangeFn<SortingState> = updater => {
-    setSorting(updater)
+  const handleSortingChange: OnChangeFn<SortingState> = (updater) => {
+    setSorting(updater);
     if (!!table.getRowModel().rows.length) {
-      rowVirtualizer.scrollToIndex?.(0)
+      rowVirtualizer.scrollToIndex?.(0);
     }
-  }
+  };
 
   //since this table option is derived from table row model state, we're using the table.setOptions utility
-  table.setOptions(prev => ({
+  table.setOptions((prev) => ({
     ...prev,
     onSortingChange: handleSortingChange,
-  }))
+  }));
 
-  const { rows } = table.getRowModel()
+  const { rows } = table.getRowModel();
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
@@ -161,20 +161,20 @@ function App() {
     getScrollElement: () => tableContainerRef.current,
     //measure dynamic row height, except in firefox because it measures table border height incorrectly
     measureElement:
-      typeof window !== 'undefined' &&
-      navigator.userAgent.indexOf('Firefox') === -1
-        ? element => element?.getBoundingClientRect().height
+      typeof window !== "undefined" &&
+      navigator.userAgent.indexOf("Firefox") === -1
+        ? (element) => element?.getBoundingClientRect().height
         : undefined,
     overscan: 5,
-  })
+  });
 
   if (isLoading) {
-    return <>Loading...</>
+    return <>Loading...</>;
   }
 
   return (
     <div className="app">
-      {process.env.NODE_ENV === 'development' ? (
+      {process.env.NODE_ENV === "development" ? (
         <p>
           <strong>Notice:</strong> You are currently running React in
           development mode. Virtualized rendering performance will be slightly
@@ -184,43 +184,43 @@ function App() {
       ({flatData.length} of {totalDBRowCount} rows fetched)
       <div
         className="container"
-        onScroll={e => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+        onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
         ref={tableContainerRef}
         style={{
-          overflow: 'auto', //our scrollable table container
-          position: 'relative', //needed for sticky header
-          height: '600px', //should be a fixed height
+          overflow: "auto", //our scrollable table container
+          position: "relative", //needed for sticky header
+          height: "600px", //should be a fixed height
         }}
       >
         {/* Even though we're still using sematic table tags, we must use CSS grid and flexbox for dynamic row heights */}
-        <table style={{ display: 'grid' }}>
+        <table style={{ display: "grid" }}>
           <thead
             style={{
-              display: 'grid',
-              position: 'sticky',
+              display: "grid",
+              position: "sticky",
               top: 0,
               zIndex: 1,
             }}
           >
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                style={{ display: 'flex', width: '100%' }}
+                style={{ display: "flex", width: "100%" }}
               >
-                {headerGroup.headers.map(header => {
+                {headerGroup.headers.map((header) => {
                   return (
                     <th
                       key={header.id}
                       style={{
-                        display: 'flex',
+                        display: "flex",
                         width: header.getSize(),
                       }}
                     >
                       <div
                         {...{
                           className: header.column.getCanSort()
-                            ? 'cursor-pointer select-none'
-                            : '',
+                            ? "cursor-pointer select-none"
+                            : "",
                           onClick: header.column.getToggleSortingHandler(),
                         }}
                       >
@@ -229,43 +229,43 @@ function App() {
                           header.getContext()
                         )}
                         {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
+                          asc: " 🔼",
+                          desc: " 🔽",
                         }[header.column.getIsSorted() as string] ?? null}
                       </div>
                     </th>
-                  )
+                  );
                 })}
               </tr>
             ))}
           </thead>
           <tbody
             style={{
-              display: 'grid',
+              display: "grid",
               height: `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
-              position: 'relative', //needed for absolute positioning of rows
+              position: "relative", //needed for absolute positioning of rows
             }}
           >
-            {rowVirtualizer.getVirtualItems().map(virtualRow => {
-              const row = rows[virtualRow.index] as Row<Person>
+            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+              const row = rows[virtualRow.index] as Row<Person>;
               return (
                 <tr
                   data-index={virtualRow.index} //needed for dynamic row height measurement
-                  ref={node => rowVirtualizer.measureElement(node)} //measure dynamic row height
+                  ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
                   key={row.id}
                   style={{
-                    display: 'flex',
-                    position: 'absolute',
+                    display: "flex",
+                    position: "absolute",
                     transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
-                    width: '100%',
+                    width: "100%",
                   }}
                 >
-                  {row.getVisibleCells().map(cell => {
+                  {row.getVisibleCells().map((cell) => {
                     return (
                       <td
                         key={cell.id}
                         style={{
-                          display: 'flex',
+                          display: "flex",
                           width: cell.column.getSize(),
                         }}
                       >
@@ -274,24 +274,24 @@ function App() {
                           cell.getContext()
                         )}
                       </td>
-                    )
+                    );
                   })}
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>
       </div>
       {isFetching && <div>Fetching More...</div>}
     </div>
-  )
+  );
 }
 
-const rootElement = document.getElementById('root')
+const rootElement = document.getElementById("root");
 
-if (!rootElement) throw new Error('Failed to find the root element')
+if (!rootElement) throw new Error("Failed to find the root element");
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
@@ -299,4 +299,4 @@ ReactDOM.createRoot(rootElement).render(
       <App />
     </QueryClientProvider>
   </React.StrictMode>
-)
+);
